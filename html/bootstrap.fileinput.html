@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>bootstrap.fileinput</title>
+
+    <link rel="stylesheet" href="../js/extra/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../js/extra/bootstrap.fileinput/css/fileinput.css">
+
+    <!-- <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css"> -->
+
+    <link rel="stylesheet" href="../js/extra/bootstrap.fileinput/themes/explorer-fas/theme.css">
+
+
+    <style>
+        form {
+            /* background: #0cc; */
+            margin: 20px;
+            width: 600px;
+            height: 240px;
+        }
+        
+    </style>
+
+</head>
+
+<body>
+
+    <form action="">
+        <div class="file-loading">
+            <input id="kv-explorer" type="file" multiple>
+        </div>
+    </form>
+
+
+    <script src="../js/jquery.js"></script>
+    <script src="../js/extra/bootstrap/js/bootstrap.min.js"></script>
+    <script src="../js/extra/bootstrap.fileinput/js/plugins/sortable.js"></script>
+    <script src="../js/extra/bootstrap.fileinput/js/fileinput.js"></script>
+    <!-- <script src="../js/extra/bootstrap.fileinput/js/locales/fr.js"></script> -->
+    <!-- <script src="../js/extra/bootstrap.fileinput/js/locales/es.js"></script> -->
+
+    <script src="../js/extra/bootstrap.fileinput/themes/fas/theme.js"></script>
+    <script src="../js/extra/bootstrap.fileinput/themes/explorer-fas/theme.js"></script>
+
+    <!-- <script src="../js/extra/bootstrap.fileinput/js/locales/zh.js"></script> -->
+
+
+
+
+
+
+    <script>
+        $(function () {
+            $("#kv-explorer").fileinput({
+                'theme': 'explorer-fas',
+                'uploadUrl': '#',
+                'showClose': false, // 隐藏右上角叉号
+                // overwriteInitial: false,
+                // initialPreviewAsData: true,
+                // initialPreview: [
+
+                // ],
+                // initialPreviewConfig: []
+            });
+        })
+    </script>
+
+</body>
+
+</html>
