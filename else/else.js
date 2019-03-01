@@ -33,59 +33,33 @@
 
     // Echarts...
     window.Echarts = function () {
-        var init = function (options) {
+        var init = function (options) { // 创建一个ECharts实例
             options = $.extend({}, {
                 "id": "echarts_dom_id", // 需要echarts图表的dom容器
-                "color": "red",
+                "renderer": "svg",
             }, options);
-            // console.log(options);
-            var oMyChart_vob = echarts.init(document.getElementById(options.id));
-            oMyChart_vob.off("click"); // 先移走点击事件（important!!!）
-            return oMyChart_vob; // 返回echarts图表对象
+            console.log(options);
+            var myChart = echarts.init(document.getElementById(options.id), null, {
+                renderer: options.renderer
+            });
+            myChart.off("click"); // 先移走点击事件（important!!!）
+            return myChart; // 返回echarts图表对象
         }
-        var gererate = function (oEcharts_vob, oOption_vob) {
+        var gererate = function (myChart, option) {
             console.log("gererate start...");
-            oEcharts_vob.setOption(oOption_vob);
+            myChart.setOption(option);
             window.addEventListener("resize", function () {
-                oEcharts_vob.resize();
+                myChart.resize();
             });
         }
         return {
             config: function (options) {
-                // console.log(options);
-                // console.log(init(options));
+                var myChart = init(options);
                 return {
                     set: function (callback) {
-                        var oEcharts_vob = init(options);
-
-                        var option = {
-                            // 全局调色盘。
-                            color: ['#c23531', '#2f4554', '#61a0a8', '#d48265', '#91c7ae'],
-                            title: {
-                                text: 'ECharts 入门示例'
-                            },
-                            tooltip: {},
-                            legend: {
-                                data: ['销量']
-                            },
-                            xAxis: {
-                                data: ["衬衫", "羊毛衫", "雪纺衫", "裤子", "高跟鞋", "袜子"],
-                                // itemStyle: {
-                                //     color: ['#c23531', '#2f4554', '#61a0a8', '#d48265', '#91c7ae'],
-
-                                // }
-                            },
-                            yAxis: {},
-                            series: [{
-                                name: '销量',
-                                type: 'bar',
-                                data: [],
-
-                            }]
-                        }
-                        gererate(oEcharts_vob, option);
-                        console.log(oEcharts_vob, option);
-                        callback(oEcharts_vob, option);
+                        gererate(myChart, options.option);
+                        // console.log(myChart, option);
+                        callback(myChart);
                     }
                 }
             }
@@ -96,20 +70,78 @@
 
 })(jQuery);
 
+var fnDynamicData_fob = function (oMyChart_vob) {
+    oMyChart_vob.showLoading();
+    console.log(111);
+    setTimeout(() => {
+        $.getJSON("./else.json", function (result) {
+            oMyChart_vob.hideLoading();
+            oMyChart_vob.setOption({
+                xAxis: {
+                    data: ["衬衫", "羊毛衫", "雪纺衫", "裤子", "高跟鞋", "袜子"],
+                },
+                series: [{
+                    name: '销量',
+                    data: result[0].data
+                }]
+            });
+        });
+    }, 3000);
+}
 
+var fnDynamicData2_fob = function (oMyChart_vob) {
+    oMyChart_vob.showLoading();
+    console.log(222);
+    setTimeout(() => {
+        $.getJSON("./else.json", function (result) {
+            console.log(result[1]);
+            oMyChart_vob.hideLoading();
+            oMyChart_vob.setOption({
+                xAxis: {
+                    data: ["衬衫", "羊毛衫", "雪纺衫", "裤子", "高跟鞋", "袜子"],
+                },
+                series: [{
+                    name: '销量',
+                    data: result[1].data2
+                }]
+            });
+        });
+    }, 3000);
+}
+
+var oXS_vob; // 销售ECharts
 
 Echarts.config({
     "id": "echarts_dom_id",
     "message": "message self",
-}).set(function (e, f) {
-    $.getJSON("./else.json", function (data) {
-        // console.log(data.data);
-        // console.log(e.series[0].data = data.data);
-        console.log(e);
-        console.log(f);
-    })
+    "option": {
+        title: {
+            text: 'ECharts 入门示例'
+        },
+        tooltip: {},
+        legend: {
+            data: ['销量']
+        },
+        xAxis: {
+            data: [],
+        },
+        yAxis: {},
+        series: [{
+            name: '销量',
+            type: 'bar',
+            data: [],
+        }]
+    }
+}).set(function (myChart) {
+    oXS_vob = myChart;
+    fnDynamicData_fob(myChart);
 });
 
+
+setTimeout(() => {
+    console.log(oXS_vob);
+    fnDynamicData2_fob(oXS_vob);
+}, 6000);
 
 /**
  *  24小时制扩展。例子：var time2 = new Date().Format("yyyy-MM-dd HH:mm:ss"); 
@@ -134,6 +166,6 @@ Date.prototype.Format = function (format) {
 
 
 var date = new Date().Format("yyyy-MM-dd");
-console.log(date);
+// console.log(date);
 
-console.log(2 + 8 * 1);
+// console.log(2 + 8 * 1);
